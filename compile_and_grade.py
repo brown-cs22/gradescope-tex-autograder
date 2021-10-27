@@ -2,7 +2,7 @@ import sys
 import os
 import json
 
-SUBMISSION = "/autograder/submission/"
+SUBMISSION = "/autograder/submission"
 RESULT = "/autograder/results/result.json"
 OUTPUT = "/autograder/results/output.txt"
 LOG_ANALYSIS_OUTPUT = "/autograder/results/log_analysis_output.txt"
@@ -33,6 +33,7 @@ def compile_file(filename):
     """
     Compiles the file and returns the output.
     """
+    os.system("cd " + SUBMISSION)
     command = "pdflatex -shell-escape -interaction=nonstopmode -halt-on-error " + filename + " > " + OUTPUT
     os.system(command)
 
@@ -58,7 +59,7 @@ def grade(filename):
     write_result("File compiled successfully! ", [warning_test, log_test])
 
 def main():
-    file_to_compile = SUBMISSION + get_filename()
+    file_to_compile = get_filename()
     compile_file(file_to_compile)
     grade(file_to_compile)
 
