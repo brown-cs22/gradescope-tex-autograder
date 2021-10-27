@@ -11,7 +11,7 @@ LOG_ANALYSIS_OUTPUT = "/autograder/results/log_analysis_output.txt"
 def write_result(output, dropdown_results=[]):
     result = {}
     result["output"] = output
-    result["dropdown_results"] = dropdown_results
+    result["tests"] = dropdown_results
     with open(RESULT, "w") as f:
         f.write(json.dumps(result))
 
