@@ -36,6 +36,7 @@ def compile_file(filename):
     """
     command = "pdflatex -shell-escape -interaction=nonstopmode -halt-on-error " + SUBMISSION + filename + " > " + OUTPUT
     os.system(command)
+    os.system(command)
 
 def grade(filename):
     """
@@ -43,7 +44,7 @@ def grade(filename):
     """
     output_file = open(OUTPUT, "r")
     output = output_file.read()
-    log_file = SOURCE + filename.replace(".tex", ".log")
+    log_file = SUBMISSION + filename.replace(".tex", ".log")
     log_file_text = open(log_file, "r").read()
     log_test = {"name": "LaTeX Output Log", "output": log_file_text, "visibility": "hidden"}
     if "Fatal error occurred, no output PDF file produced!" in output:
@@ -52,7 +53,7 @@ def grade(filename):
         log_test["max_score"] = 2
         write_result("Error compiling: There was a fatal error while compiling the submission and no PDF file was produced. Please check your .tex file and try again. The log file is shown below. ", [log_test])
         sys.exit(1)
-    os.system("/autograder/source/texloganalyser -a -w " + log_file + " > " + LOG_ANALYSIS_OUTPUT)
+    os.system("/autograder/source/texloganalyser --last -a -w -t -i " + log_file + " > " + LOG_ANALYSIS_OUTPUT)
     log_analysis_output = open(LOG_ANALYSIS_OUTPUT, "r").read()
     warning_test = {"max_score": 1, "name": "Compilation", "output": log_analysis_output, "score": 0, "visibility": "visible"}
     if "0 warnings" in log_analysis_output:

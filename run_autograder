@@ -9,4 +9,5 @@ export LC_ALL=C
 chmod +x /autograder/source/texloganalyser
 
 # Runs autograder
-python3 compile_and_grade.py
+cd ../submission
+python3 ../source/compile_and_grade.py
