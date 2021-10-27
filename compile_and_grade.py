@@ -4,7 +4,7 @@ import json
 
 SUBMISSION = "/autograder/submission/"
 SOURCE = "/autograder/source/"
-RESULT = "/autograder/results/result.json"
+RESULT = "/autograder/results/results.json"
 OUTPUT = "/autograder/results/output.txt"
 LOG_ANALYSIS_OUTPUT = "/autograder/results/log_analysis_output.txt"
 
