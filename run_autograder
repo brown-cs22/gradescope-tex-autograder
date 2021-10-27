@@ -5,6 +5,7 @@ git clean -f
 git pull
 
 # Makes TeX Log script executable
+export LC_ALL=C
 chmod +x /autograder/source/texloganalyser
 
 # Runs autograder
