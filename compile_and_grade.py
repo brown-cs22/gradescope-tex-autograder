@@ -23,9 +23,9 @@ def get_filename():
     tex_files = []
     for file in files:
         if file.endswith(".tex"):
-            tex_files.extend(file)
+            tex_files.append(file)
     if len(tex_files) != 1:
-        write_result("Error compiling: There should be only one `.tex` file in the submission.")
+        write_result("Error compiling: There should be only one .tex file in the submission.")
         sys.exit(1)
     filename = files[0]
     return files[0]
