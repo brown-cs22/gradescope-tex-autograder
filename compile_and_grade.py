@@ -2,7 +2,8 @@ import sys
 import os
 import json
 
-SUBMISSION = "/autograder/submission"
+SUBMISSION = "/autograder/submission/"
+SOURCE = "/autograder/source/"
 RESULT = "/autograder/results/result.json"
 OUTPUT = "/autograder/results/output.txt"
 LOG_ANALYSIS_OUTPUT = "/autograder/results/log_analysis_output.txt"
@@ -46,7 +47,7 @@ def grade(filename):
     if "Fatal error occurred, no output PDF file produced!" in output:
         write_result("Error compiling: There was a fatal error while compiling the submission and no PDF file was produced.")
         sys.exit(1)
-    log_file = filename.replace(".tex", ".log")
+    log_file = SOURCE + filename.replace(".tex", ".log")
     log_file_text = open(log_file, "r").read()
     os.system("/autograder/source/texloganalyser -a -w " + log_file + " > " + LOG_ANALYSIS_OUTPUT)
     log_analysis_output = open(LOG_ANALYSIS_OUTPUT, "r").read()
