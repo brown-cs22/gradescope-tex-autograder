@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+cd /autograder/source
+git pull
+
+# Makes TeX Log script executable
+chmod +x /autograder/source/texloganalyser
+
+# Runs autograder
+python3 compile_and_grade.py
