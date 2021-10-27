@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 cd /autograder/source
+git clean -f
 git pull
 
 # Makes TeX Log script executable
