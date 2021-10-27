@@ -56,7 +56,7 @@ def grade(filename):
         warning_test["score"] += 0.5
     if "0 bad boxes" in log_analysis_output:
         warning_test["score"] += 0.5
-    log_test["visibility": "hidden"]
+    log_test["visibility"] = "hidden"
     write_result("It appears that your file compiled successfully! You'll see any warnings or bad boxes produced below, along with a generated score. Please still verify that your submitted PDF is correct and correctly tagged. ", [warning_test, log_test])
 
 def main():
