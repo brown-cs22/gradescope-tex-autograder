@@ -24,8 +24,10 @@ def get_filename():
     for file in files:
         if file.endswith(".tex"):
             tex_files.append(file)
+        if file.endswith("main.tex"): # If we see `main.tex`, assume that is main file
+            return file
     if len(tex_files) != 1:
-        write_result("Error compiling: There should be only one .tex file in the submission.")
+        write_result("Error compiling: Since there was no main.tex, we tried to infer the .tex file to compile, of which there were more than 1. There should be only one .tex file in the submission.")
         sys.exit(1)
     filename = files[0]
     return files[0]
