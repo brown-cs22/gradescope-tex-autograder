@@ -29,8 +29,8 @@ def get_filename():
     if len(tex_files) != 1:
         write_result("Error compiling: Since there was no main.tex, we tried to infer the .tex file to compile, of which there were more than 1. There should be only one .tex file in the submission.")
         sys.exit(1)
-    filename = files[0]
-    return files[0]
+    filename = tex_files[0]
+    return tex_files[0]
 
 def compile_file(filename):
     """
