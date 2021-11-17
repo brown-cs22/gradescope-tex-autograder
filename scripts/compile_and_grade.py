@@ -52,7 +52,7 @@ def grade(filename):
     if "Fatal error occurred, no output PDF file produced!" in output:
         log_test["visibility"] = "visible"
         log_test["score"] = 0
-        log_test["max_score"] = 2
+        log_test["max_score"] = 1
         write_result("Error compiling: There was a fatal error while compiling the submission and no PDF file was produced. Please check your .tex file and try again. The log file is shown below. ", [log_test])
         sys.exit(1)
     os.system("/autograder/source/scripts/texloganalyser --last -a -w -t -i " + log_file + " > " + LOG_ANALYSIS_OUTPUT)
@@ -62,7 +62,7 @@ def grade(filename):
         warning_test["score"] += 0.5
     if "0 bad boxes" in log_analysis_output:
         warning_test["score"] += 0.5
-    write_result("It appears that your file compiled successfully! You'll see any warnings or bad boxes produced below, along with a generated score. Please still verify that your submitted PDF is correct and correctly tagged. ", [warning_test, log_test])
+    write_result("Your file compiled successfully! You'll see any warnings or bad boxes produced below, along with a generated score. Please still verify that your submitted PDF is correct and correctly tagged. ", [warning_test, log_test])
 
 def main():
     file_to_compile = get_filename()
