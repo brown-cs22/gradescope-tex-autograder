@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cd /autograder/source
-git clean -f
+git reset --hard HEAD
 git pull
 
 # Runs shell script for autograder, since we pull each time. 
