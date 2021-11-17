@@ -55,7 +55,7 @@ def grade(filename):
         log_test["max_score"] = 2
         write_result("Error compiling: There was a fatal error while compiling the submission and no PDF file was produced. Please check your .tex file and try again. The log file is shown below. ", [log_test])
         sys.exit(1)
-    os.system("/autograder/source/texloganalyser --last -a -w -t -i " + log_file + " > " + LOG_ANALYSIS_OUTPUT)
+    os.system("/autograder/source/scripts/texloganalyser --last -a -w -t -i " + log_file + " > " + LOG_ANALYSIS_OUTPUT)
     log_analysis_output = open(LOG_ANALYSIS_OUTPUT, "r").read()
     warning_test = {"max_score": 1, "name": "Compilation", "output": log_analysis_output, "score": 0, "visibility": "visible"}
     if "0 warnings" in log_analysis_output:
