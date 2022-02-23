@@ -109,3 +109,4 @@
 }
 
 \renewcommand{\implies}{\to}
+\author{}
