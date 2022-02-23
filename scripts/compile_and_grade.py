@@ -11,7 +11,7 @@ PREAMBLE = "This autograder is still in beta! Do take the results with a grain o
 
 def write_result(output, dropdown_results=[]):
     result = {}
-    result["output"] = f"{PREAMBLE}\n⠀\n{output}"
+    result["output"] = f"{PREAMBLE}\n\t\n{output}"
     result["tests"] = dropdown_results
     with open(RESULT, "w") as f:
         f.write(json.dumps(result))
