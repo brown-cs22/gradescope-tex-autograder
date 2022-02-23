@@ -28,7 +28,7 @@ def get_filename():
         if file.endswith("main.tex"): # If we see `main.tex`, assume that is main file
             return file
     if len(tex_files) != 1:
-        write_result("Error compiling", "Since there was no main.tex, we tried to infer the .tex file to compile, of which there were more than 1. There should be only one .tex file in the submission. ", 0, 2)
+        write_result("Error compiling", "Since there was no main.tex, we tried to infer the .tex file to compile, of which there were more than 1. \nThere should be only one .tex file in the submission. ", 0, 2)
         sys.exit(1)
     filename = tex_files[0]
     return tex_files[0]
@@ -54,7 +54,7 @@ def grade(filename):
         log_test["visibility"] = "visible"
         log_test["score"] = 0
         log_test["max_score"] = 1
-        write_result("Error compiling", "There was a fatal error while compiling the submission and no PDF file was produced. Please check your .tex file and try again. The log file is shown below. ", 0, 1, [log_test])
+        write_result("Error compiling", "There was a fatal error while compiling the submission and no PDF file was produced. \nPlease check your .tex file and try again. The log file is shown below. ", 0, 1, [log_test])
         sys.exit(1)
     os.system("/autograder/source/scripts/texloganalyser --last -a -w -t -i " + log_file + " > " + LOG_ANALYSIS_OUTPUT)
     log_analysis_output = open(LOG_ANALYSIS_OUTPUT, "r").read()
@@ -63,7 +63,7 @@ def grade(filename):
         warning_test["score"] += 1
     else:
         warning_test["score"] += 0.9
-    write_result("Your file compiled successfully!", "You'll see any warnings or bad boxes produced below, along with a generated score. Please still verify that your submitted PDF is correct and correctly tagged.", 1, 1, [warning_test, log_test])
+    write_result("Your file compiled successfully!", "You'll see any warnings or bad boxes produced below, along with a generated score. \nPlease still verify that your submitted PDF is correct and correctly tagged.", 1, 1, [warning_test, log_test])
 
 def main():
     os.chdir(SUBMISSION)
