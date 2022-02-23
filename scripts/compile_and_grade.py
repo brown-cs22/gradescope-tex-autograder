@@ -7,10 +7,11 @@ SOURCE = "/autograder/source/"
 RESULT = "/autograder/results/results.json"
 OUTPUT = "/autograder/results/output.txt"
 LOG_ANALYSIS_OUTPUT = "/autograder/results/log_analysis_output.txt"
+PREAMBLE = "This autograder is still in beta! Do take the results with a grain of salt (it might tell you there are issues with your file when there aren't any). We hope the autograder will catch LaTeX errors before your final sumbission (or tell you that your file successfully compiled) so you are able to amend any issues with your file. The results here are solely for your information, they are not for a grade and we will not be looking at the output whatsoever. If you have any feedback, please don't hesitate to contact us. "
 
 def write_result(output, dropdown_results=[]):
     result = {}
-    result["output"] = output
+    result["output"] = f"{PREAMBLE}\n\n{output}"
     result["tests"] = dropdown_results
     with open(RESULT, "w") as f:
         f.write(json.dumps(result))
@@ -27,7 +28,7 @@ def get_filename():
         if file.endswith("main.tex"): # If we see `main.tex`, assume that is main file
             return file
     if len(tex_files) != 1:
-        write_result("Error compiling: Since there was no main.tex, we tried to infer the .tex file to compile, of which there were more than 1. There should be only one .tex file in the submission.")
+        write_result("Error compiling: Since there was no main.tex, we tried to infer the .tex file to compile, of which there were more than 1. There should be only one .tex file in the submission. ")
         sys.exit(1)
     filename = tex_files[0]
     return tex_files[0]
