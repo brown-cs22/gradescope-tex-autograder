@@ -12,7 +12,7 @@ PREAMBLE = "This autograder is still in beta! Do take the results with a grain o
 def write_result(output_header, output_text, output_score=1, output_max_score=1, dropdown_results=[]):
     result = {}
     result["output"] = f"{PREAMBLE}"
-    result["tests"] = [{"name": output_header, "output": output_text, "score": output_score, "max_score": output_max_score}] + dropdown_results
+    result["tests"] = [{"name": output_header, "output": output_text, "score": output_score, "max_score": output_max_score, "visibility": "visible"}] + dropdown_results
     with open(RESULT, "w") as f:
         f.write(json.dumps(result))
 
