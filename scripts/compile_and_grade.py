@@ -7,9 +7,9 @@ SOURCE = "/autograder/source/"
 RESULT = "/autograder/results/results.json"
 OUTPUT = "/autograder/results/output.txt"
 LOG_ANALYSIS_OUTPUT = "/autograder/results/log_analysis_output.txt"
-PREAMBLE = "This autograder is still in beta! Do take the results with a grain of salt (it might tell you there are issues with your file when there aren't any). We hope the autograder will catch LaTeX errors before your final sumbission (or tell you that your file successfully compiled) so you are able to amend any issues with your file. The results here are solely for your information, they are not for a grade and we will not be looking at the output whatsoever. If you have any feedback, please don't hesitate to contact us. "
+PREAMBLE = "This autograder is still in beta! Do take the results with a grain of salt (it might tell you there are issues with your file when there aren't any). We hope the autograder will catch LaTeX errors before your final sumbission (or tell you that your file successfully compiled) so you are able to amend any issues with your file. \n\t\nThe results here are solely for your information, they are not for a grade and we will not be looking at the output whatsoever. If you have any feedback, please don't hesitate to contact us. \n\t\n - CS22 TAs"
 
-def write_result(output_header, output_text, score=1, output_max_score=1 dropdown_results=[]):
+def write_result(output_header, output_text, score=1, output_max_score=1, dropdown_results=[]):
     result = {}
     result["output"] = f"{PREAMBLE}"
     result["tests"] = [{"name": output_header, "output": output_text, "score": output_score, "max_score": output_max_score}].append(dropdown_results)
