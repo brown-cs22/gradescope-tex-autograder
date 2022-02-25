@@ -58,11 +58,15 @@ def grade(filename):
         sys.exit(1)
     os.system("/autograder/source/scripts/texloganalyser --last -w " + log_file + " > " + LOG_ANALYSIS_OUTPUT)
     log_analysis_output = open(LOG_ANALYSIS_OUTPUT, "r").read()
-    warning_test = {"max_score": 1, "name": "Warnings", "output": log_analysis_output, "score": 0, "visibility": "visible"}
+    warning_test = {"max_score": 0, "name": "Warnings", "output": log_analysis_output, "score": -0.1, "visibility": "visible"}
+    output_tests = [warning_test, log_test]
     if "0 warnings" in log_analysis_output:
-        warning_test["score"] += 1
+        warning_test["score"] = 0
         warning_test["name"] = "No warnings!"
-    write_result("Your file compiled successfully!", "You'll see any warnings or bad boxes produced below, along with a generated score. \nPlease still verify that your submitted PDF is correct and correctly tagged.", 1, 1, [warning_test, log_test])
+        fun_tea_text = open(f"{SOURCE}templates/fun/tea.txt", "r", encoding="utf-8")
+        tea_test = {"name": "Tea!", "output": fun_tea_text, "visibility": "visible"}
+        output_tests = output_tests + [tea_test]
+    write_result("Your file compiled successfully!", "You'll see any warnings or bad boxes produced below, along with a generated score. \nPlease still verify that your submitted PDF is correct and correctly tagged.", 1, 1, output_tests)
 
 def main():
     os.chdir(SUBMISSION)
