@@ -58,7 +58,7 @@ def grade(filename):
         sys.exit(1)
     os.system("/autograder/source/scripts/texloganalyser --last -w " + log_file + " > " + LOG_ANALYSIS_OUTPUT)
     log_analysis_output = open(LOG_ANALYSIS_OUTPUT, "r").read()
-    warning_test = {"max_score": 0, "name": "Warnings", "output": log_analysis_output, "score": -0.1, "visibility": "visible"}
+    warning_test = {"name": "Warnings", "output": log_analysis_output, "visibility": "visible"}
     output_tests = [warning_test, log_test]
     if "0 warnings" in log_analysis_output:
         warning_test["name"] = "No warnings!"
