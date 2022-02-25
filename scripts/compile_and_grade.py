@@ -7,7 +7,7 @@ SOURCE = "/autograder/source/"
 RESULT = "/autograder/results/results.json"
 OUTPUT = "/autograder/results/output.txt"
 LOG_ANALYSIS_OUTPUT = "/autograder/results/log_analysis_output.txt"
-PREAMBLE = "This autograder is still in beta! It works by attempting to compile your .tex file and providing you with feedback if there are warnings and errors. The easiest way to submit to this autograder is to download the source .zip file from Overleaf and uploading that directly (Menu > Download > Source).\n\t\nPlease take these results with a grain of salt (it is still very buggy!). We hope the autograder will catch LaTeX errors before your final sumbission so you are able to amend any issues with your file. \n\t\nThe results here are solely for your information, they are not for a grade and we will not be looking at the output whatsoever. If you have any feedback, please don't hesitate to contact us. \n\t\n - CS22 TAs"
+PREAMBLE = "This autograder is still in beta! It works by attempting to compile your .tex file and providing you with feedback if there are warnings and errors. The easiest way to submit to this autograder is to download the source .zip file from Overleaf and uploading that directly (Menu > Download > Source).\n\t\nPlease take these results with a grain of salt (it is still very buggy!). We hope the autograder will catch LaTeX errors before your final sumbission so you are able to amend any issues with your file. \n\t\nThe results here are solely for your information, they are not for a grade and we will not be looking at the output whatsoever. If you have any feedback, please don't hesitate to contact us. \n\t\n - CS22 TAs <3"
 
 def write_result(output_header, output_text, output_score=1, output_max_score=1, dropdown_results=[]):
     result = {}
@@ -28,7 +28,7 @@ def get_filename():
         if file.endswith("main.tex"): # If we see `main.tex`, assume that is main file
             return file
     if len(tex_files) != 1:
-        write_result("Error compiling", "Since there was no main.tex, we tried to infer the .tex file to compile, of which there were more than 1. \nThere should be only one .tex file in the submission. ", 0, 2)
+        write_result("Error compiling", "Since there was no main.tex, we tried to infer the .tex file to compile, of which there were none or more than 1. \nThere should be exactly one .tex file in the submission (not within any folders). \nPlease try re-uploading your submission again. ", 0, 2)
         sys.exit(1)
     filename = tex_files[0]
     return tex_files[0]
