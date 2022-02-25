@@ -1,3 +1,4 @@
+.
                     .------.____
                  .-'       \ ___)
               .-'         \\\
@@ -43,4 +44,4 @@
         `""--..,,_____            _____,,..--""`
                       `"""----"""`
 
-~Great job! Have a cup of (virtual) tea on the autograder!~
+Great job! Have a cup of (virtual) tea on the autograder!

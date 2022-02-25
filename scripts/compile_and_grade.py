@@ -61,11 +61,14 @@ def grade(filename):
     warning_test = {"max_score": 0, "name": "Warnings", "output": log_analysis_output, "score": -0.1, "visibility": "visible"}
     output_tests = [warning_test, log_test]
     if "0 warnings" in log_analysis_output:
-        warning_test["score"] = 0
         warning_test["name"] = "No warnings!"
         fun_tea_text = open(f"{SOURCE}templates/fun/tea.txt", "r", encoding="utf-8").read()
         tea_test = {"name": "Tea!", "output": fun_tea_text, "visibility": "visible"}
         output_tests = output_tests + [tea_test]
+    else:
+        warning_test["max_score"] = 0
+        warning_test["score"] = -0.1
+        warning_test["name"] = "Warnings"
     write_result("Your file compiled successfully!", "You'll see any warnings or bad boxes produced below, along with a generated score. \nPlease still verify that your submitted PDF is correct and correctly tagged.", 1, 1, output_tests)
 
 def main():
