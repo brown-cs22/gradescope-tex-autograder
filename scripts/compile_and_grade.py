@@ -45,10 +45,11 @@ def grade(filename):
     """
     Grades the submission.
     """
-    output_file = open(OUTPUT, "r", encoding="utf-8")
-    output = output_file.read()
-    log_file = SUBMISSION + filename.replace(".tex", ".log")
-    log_file_text = open(log_file, "r", encoding="latin1").read()
+    with open(OUTPUT, "r", encoding="utf-8") as output_file:
+        output = output_file.read()
+    log = SUBMISSION + filename.replace(".tex", ".log")
+    with open(log, "r", encoding="latin1") as log_file:
+        log_file_text = log_file.read()
     log_test = {"name": "LaTeX Output Log", "output": log_file_text.split("! ", 1)[-1], "visibility": "hidden"}
     if "Fatal error occurred, no output PDF file produced!" in output:
         log_test["visibility"] = "visible"
@@ -57,12 +58,14 @@ def grade(filename):
         write_result("Error compiling", "There was a fatal error while compiling the submission and no PDF file was produced. \nPlease check your .tex file and try again. The log file is shown below. ", 0, 1, [log_test])
         sys.exit(1)
     os.system("/autograder/source/scripts/texloganalyser --last -w " + log_file + " > " + LOG_ANALYSIS_OUTPUT)
-    log_analysis_output = open(LOG_ANALYSIS_OUTPUT, "r").read()
+    with open(LOG_ANALYSIS_OUTPUT, "r") as log_analysis_file:
+        log_analysis_output = log_analysis_file.read()
     warning_test = {"name": "Warnings", "output": log_analysis_output, "visibility": "visible"}
     output_tests = [warning_test, log_test]
     if "0 warnings" in log_analysis_output:
         warning_test["name"] = "No warnings!"
-        fun_tea_text = open(f"{SOURCE}templates/fun/tea.txt", "r", encoding="utf-8").read()
+        with open(f"{SOURCE}templates/fun/tea.txt", "r", encoding="utf-8") as fun_tea_file:
+            fun_tea_text = fun_tea_file.read()
         tea_test = {"name": "Tea!", "output": fun_tea_text, "visibility": "visible"}
         output_tests = output_tests + [tea_test]
     else:
