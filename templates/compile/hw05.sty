@@ -1,0 +1,116 @@
+\title{Homework 5}
+
+\newif\ifdraft
+\draftfalse
+\DeclareOption{draft}{\drafttrue} % Whether or not document is draft
+
+% Process options
+\ProcessOptions\relax
+
+\newcommand{\problemtext}[1]{
+    \ifdraft
+        {\color{RawSienna}
+        #1
+        }
+    \fi}
+
+\newcommand{\one}{
+    \problemtext{
+        Consider a sequences of numbers $a_1, a_2, a_3, \dots$ where $a_n = 50 + n^2$ for $n=1, 2, 3, \dots$. The first few values are
+        \[a_1 = 51,\quad a_2 = 54,\quad a_3 = 59,\quad a_4 = 66,\quad a_5 = 75, \quad \dots\]
+    }}
+
+\newcommand{\onea}{
+    \problemtext{
+        \emph{Warm-up.} Compute $a_{15}, a_{16}, a_{167}$, and $a_{168}$. Check that you got the values:
+        \[a_{15} = 275,\quad a_{16} = 306,\quad a_{167} = 27939,\quad a_{168} = 28274\]
+    }}
+
+\newcommand{\oneb}{
+    \problemtext{
+        Use the Euclidean algorithm to calculate the following values, writing out every intermediate step. \emph{Providing the answer without any steps will yield no credit.}
+        \begin{enumerate}[i.]
+            \item $\gcd(a_{15}, a_{16}) = \gcd(275, 306)$.
+            \item $\gcd(a_{167}, a_{168}) = \gcd(27939, 28274)$.
+        \end{enumerate}
+    }}
+
+\newcommand{\onec}{
+    \problemtext{
+        Using part (b.i) from above, and using the extended Euclidean algorithm, solve the following congruence, writing out every intermediate step. \emph{Providing the answer without any steps will yield no credit.}
+        \[x\text{ such that }275 \cdot x \equiv 1\pmod{306}.\]
+    }}
+
+\newcommand{\oned}{
+\problemtext{
+We are interested in the value of $\gcd(a_{n}, a_{n+1})$ for different values of $n$. From part (b), we know that this can be different values.
+
+Let's compute two more examples. Use a calculator\footnote{You are welcome to use a site such as \href{https://wolframalpha.com}{wolframalpha.com} and simply enter a mathematical expression, such as \textsf{`gcd(50 + 102\^{}2, 50 + 103\^{}2)'}, into the search box. You are welcome to use this to \emph{verify} your solutions to part (b), but you should show your steps.} to compute the following:
+\begin{enumerate}[i.]
+    \item $\gcd(a_{102}, a_{103}) = \gcd(50 + 102^2, 50 + 103^2)$.
+    \item $\gcd(a_{368}, a_{369}) = \gcd(50 + 368^2, 50 + 369^2)$.
+\end{enumerate}
+}}
+
+\newcommand{\onee}{
+    \problemtext{
+        Verify that your answers from parts (b) and (d) satisfy
+        \[\gcd(a_n, a_{n+1}) = \gcd(n^2 - 100n, 2n + 1) = \gcd(n-100, 201)\]
+    }}
+
+\newcommand{\onef}{
+    \problemtext{
+        Using the Euclidean algorithm and algebraic manipulation, show that the property in part (e) holds true for all $n$.
+    }}
+
+\newcommand{\oneg}{
+    \problemtext{
+        For which $n$ is $\gcd(a_n, a_{n+1})$ the greatest, and what is the maximum value? Find and classify \emph{all} $n$.
+    }}
+
+\newcommand{\twoa}{
+    \problemtext{
+        Prove that if an integer $n$ is odd, then either $n+1$ or $n-1$ is divisible by 4.
+    }}
+
+\newcommand{\twob}{
+    \problemtext{
+        Prove using strong induction that for any odd integer $n \geq 3$, an $n \times n$ chessboard with the center square removed can be tiled by these 4-square L-tiles:
+        \begin{center}
+            \begin{tabular}{|l|c r }
+                \cline{0-0} ~ & ~ & ~                       \\ \hline
+                ~             & ~ & \multicolumn{1}{|r|}{~} \\ \hline
+            \end{tabular}
+        \end{center}
+        \hint{Show this for $n=3$ and $n=5$ first as your base cases. Then, for every other odd number $n$, can we add a 2-thick border to the tiling for $n-4$ using our L-tiles? }
+    }}
+
+\newcommand{\three}{
+    \problemtext{
+        Show that if $m$ is a positive integer greater than 1
+        and
+        \begin{align*}
+            ac & \equiv bc \pmod{m},                                          \\
+            \intertext{then}
+            a  & \equiv b\ \left(\mathrm{mod}\ {\frac{m}{\gcd(c, m)}}\right).
+        \end{align*}
+        \hint{Use the definition $a\equiv b\pmod{m} \Leftrightarrow m\mid a-b \Leftrightarrow \exists k\in\Z\text{ s.t. }mk = a-b$.}
+    }}
+
+\newcommand{\mindbendera}{
+    \problemtext{
+        Prove that any $n$ satisfying the following conditions is a Carmichael number\footnote{This actually goes both ways. If $n$ is a Carmichael number, $n$ satisfies those conditions. We only prove the backward direction. This is called \emph{Korselt's Criterion}.}:
+        \begin{enumerate}[i.]
+            \item $n$ is odd.
+            \item $n$ is squarefree. That is, each prime in $n$'s prime factorization appears only once; there are no powers of primes that divide $n$.
+            \item For every prime $p$ dividing $n$, we have that $(p-1) \mid (n-1)$.
+        \end{enumerate}
+        \hint{By the Chinese Remainder Theorem, if $a \equiv b \pmod{p_i}$ for distinct primes
+            $p_i$, then $a \equiv b \pmod{N}$, where $N$ is the product of the $p_i$'s.}
+    }}
+
+\newcommand{\mindbenderb}{
+    \problemtext{
+        Prove that a Carmichael number cannot be the product of two distinct primes.
+    }}
+
