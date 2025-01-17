@@ -23,15 +23,20 @@ PREAMBLE = "This autograder is still in beta! It works by attempting to compile 
 
 def write_result(output_header, output_text, output_score=1, output_max_score=1, dropdown_results=[]):
     result = {}
-    # Appends to existing results if they already exist
-    if os.path.isfile(RESULT):
-        with open(RESULT, "r") as f:
-            result = json.load(f)
     result["output"] = f"{PREAMBLE}"
+    result["tests"] = [{"name": output_header, "output": output_text, "score": output_score, "max_score": output_max_score, "visibility": "visible"}] + dropdown_results
+    with open(RESULT, "w") as f:
+        f.write(json.dumps(result))
+
+# Add a test without a score to the autograder output
+def add_test(name, output, passed):
+    result = {}
+    with open(RESULT, "r") as f:
+        result = json.load(f)
     if "tests" in result:
-        result["tests"] = result["tests"] + [{"name": output_header, "output": output_text, "score": output_score, "max_score": output_max_score, "visibility": "visible"}] + dropdown_results
+        result["tests"] = result["tests"] + [{"name": name, "output": output, "status": "passed" if passed == True else "failed", "visibility": "visible"}]
     else:
-        result["tests"] = [{"name": output_header, "output": output_text, "score": output_score, "max_score": output_max_score, "visibility": "visible"}] + dropdown_results
+        result["tests"] = [{"name": name, "output": output, "status": "passed" if passed == True else "failed", "visibility": "visible"}]
     with open(RESULT, "w") as f:
         f.write(json.dumps(result))
 
@@ -94,6 +99,7 @@ def grade():
 
 session = requests.Session()
 def upload():
+    # Get the login endpoint first to retrieve CSRF token
     login_page_res = session.get(LOGIN_ENDPOINT)
     login_page_soup = BeautifulSoup(login_page_res.text, "html.parser")
     auth_token = login_page_soup.select_one(
@@ -101,13 +107,14 @@ def upload():
         )["value"]
     login_data = {
         "utf8": "✓",
-        "authenticity_token": auth_token, # replace this
+        "authenticity_token": auth_token,
         "session[email]": config.username,
         "session[password]": config.password,
         "session[remember_me]": 0,
         "commit": "Log In",
         "session[remember_me_sso]": 0,
     }
+    # Login
     login_resp = session.post(LOGIN_ENDPOINT, login_data)
 
     if (
@@ -122,17 +129,19 @@ def upload():
 
             session.headers.update({"X-CSRF-Token": csrf_token})
     else:
-        write_result("PDF Assignment Upload Error", "There was an error logging into Gradescope. Please try again or inform the course staff.", 0, 0)
+        add_test("PDF Assignment Upload Error", "There was an error logging into Gradescope. Please try again or inform the course staff.", False)
         sys.exit(1)
 
+    # Get student ID from submission metadata - assumes this is not a group assignment
     with open(SUBMISSION_METADATA, "r") as metadata_file:
         submission_metadata = json.load(metadata_file)
     student_id = str(submission_metadata['users'][0]['id'])
 
+    # Upload PDF
     with open(SUBMISSION + "submission.pdf", "rb") as pdf_file:
         file_upload_fields = [
                 ("utf8", "✓"),
-                ("authenticity_token", session.headers.get("X-CSRF-Token")), # replace this
+                ("authenticity_token", session.headers.get("X-CSRF-Token")),
                 ("owner_id", student_id),
                 (
                         "pdf_attachment",
@@ -150,21 +159,23 @@ def upload():
             }
         upload_response = session.post(SUBMISSIONS_ENDPOINT, data=multipart, headers=headers)
     if upload_response.url == COURSE_ENDPOINT or upload_response.url.endswith("submissions"):
-        write_result("PDF Assignment Upload Error", "There was an error uploading your compiled PDF file to Gradescope. Please try again or inform the course staff.", 0, 0)
+        add_test("PDF Assignment Upload Error", "There was an error uploading your compiled PDF file to Gradescope. Please try again or inform the course staff.", False)
         sys.exit(1)
-    write_result("PDF Upload Successful", "Your compiled PDF has successfully been uploaded to Gradescope. Please go into the PDF assignment and make sure it looks correct. NOTE: The assignment will show up as if it was submitted late, regardless if you submitted on time. Don't worry.", 0, 0)
+    add_test("PDF Upload Successful", "Your compiled PDF has successfully been uploaded to Gradescope. Please go into the PDF assignment and make sure it looks correct. NOTE: The assignment will show up as if it was submitted late, regardless if you submitted on time. Don't worry.", True)
+    # Return the submission URL
     return upload_response.url[:upload_response.url.rfind('/')]
 
+# Assumes PDF contains every question sequentially and that there cannot be multiple problems on one page
 def get_pages():
     reader = PdfReader(SUBMISSION + "submission.pdf")
     num_pages = reader.get_num_pages()
     # Less pages than questions is bad
     if num_pages < len(config.question_ids):
-        write_result("Page Assignment Failure", "We could not automatically assign pages to your uploaded PDF as there were less pages than assigned questions. Please make sure you're using the assigned template.", 0, 0)
+        add_test("Page Assignment Failure", "We could not automatically assign pages to your uploaded PDF as there were less pages than assigned questions. Please make sure you're using the assigned template.", False)
         sys.exit(1)
     # 100 characters should be enough to find the header
     if reader.pages[0].extract_text().find("Problem 1", 0, 100) == -1:
-        write_result("Page Assignment Failure", "We could not automatically assign pages to your uploaded PDF as Problem 1 was not found on the first page. Please make sure you're using the assigned template or contact the course staff.", 0, 0)
+        add_test("Page Assignment Failure", "We could not automatically assign pages to your uploaded PDF as Problem 1 was not found on the first page. Please make sure you're using the assigned template or contact the course staff.", False)
         sys.exit(1)
     next_problem = 2
     pages = []
@@ -177,8 +188,9 @@ def get_pages():
         else:
             curr_pages.append(i)
     pages.append(curr_pages)
+    # Not all questions were assigned
     if len(pages) < len(config.question_ids):
-        write_result("Page Assignment Failure", f"We could not automatically assign pages to your uploaded PDF as we only found {len(pages)} problems in it. Please make sure you're using the assigned template or contact the course staff.", 0, 0)
+        add_test("Page Assignment Failure", f"We could not automatically assign pages to your uploaded PDF as we only found {len(pages)} problems in it. Please make sure you're using the assigned template or contact the course staff.", False)
         sys.exit(1)
     return pages
 
@@ -196,19 +208,19 @@ def set_pages(submission_url, pages):
     while status == 1:
         status_response = session.get(attachment_status_url)
         if status_response.ok == False:
-            write_result("Page Assignment Failure", "Failed to check PDF attachment status on Gradescope. Please try again or contact the course staff.", 0, 0)
+            add_test("Page Assignment Failure", "Failed to check PDF attachment status on Gradescope. Please try again or contact the course staff.", False)
             sys.exit(1)
         status = status_response.json()["status"]
         if status == 2:
             break
         time.sleep(5)
     if status != 2:
-        write_result("Page Assignment Failure", "Unknown PDF processing status encountered. Please try again or contact the course staff.", 0, 0)
+        add_test("Page Assignment Failure", "Unknown PDF processing status encountered. Please try again or contact the course staff.", False)
         sys.exit(1)
     # Get processed page IDs in JSON
     select_pages_json = session.get(select_pages_url, headers={"Accept": "application/json"})
     if select_pages_json.ok == False:
-        write_result("Page Assignment Failure", "Failed to get pages in JSON format from Gradescope. Please try again or contact the course staff.", 0, 0)
+        add_test("Page Assignment Failure", "Failed to get pages in JSON format from Gradescope. Please try again or contact the course staff.", False)
         sys.exit(1)
     pages_resp = select_pages_json.json()["pdf_attachment"]["pages"]
     # Convert pages list to dictionary and page numbers to Gradescope IDs
@@ -216,13 +228,15 @@ def set_pages(submission_url, pages):
     for idx, question_pages in enumerate(pages):
         pages_dict.update({config.question_ids[idx]: list(map(lambda num: pages_resp[num]["id"], question_pages))})
     update_pages_form_data = {"pages_for_question": json.dumps(pages_dict), "pages": json.dumps(pages_resp)}
+    # Call update pages endpoint
     update_pages_resp = session.post(update_pages_url, data=update_pages_form_data)
     if update_pages_resp.ok and update_pages_resp.json()["path"]:
-        write_result("Page Assignment Successful", "Auto-assignment of PDF pages successful. Please go into the PDF assignment, check and re-assign pages if it has been done incorrectly.", 0, 0)
+        add_test("Page Assignment Successful", "Auto-assignment of PDF pages successful. Please go into the PDF assignment, check and re-assign pages if it has been done incorrectly.", True)
     else:
-        write_result("Page Assignment Failure", "Invalid response received while trying to update page selection on Gradescope. Please try again or contact the course staff.", 0, 0)
+        add_test("Page Assignment Failure", "Invalid response received while trying to update page selection on Gradescope. Please try again or contact the course staff.", False)
         sys.exit(1)
 
+# Removes [draft] from the tex if someone forgot to do that
 def remove_draft(filename):
     with open(SUBMISSION + filename, 'r') as file: 
         data = file.read() 
