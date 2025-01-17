@@ -22,6 +22,7 @@ LOG_ANALYSIS_OUTPUT = "/autograder/results/log_analysis_output.txt"
 PREAMBLE = "This autograder is still in beta! It works by attempting to compile your .tex file and providing you with feedback if there are warnings and errors. The easiest way to submit to this autograder is to download the source .zip file from Overleaf and uploading that directly (Menu > Download > Source).\n\t\nPlease take these results with a grain of salt (it is still very buggy!). We hope the autograder will catch LaTeX errors before your final sumbission so you are able to amend any issues with your file. \n\t\nThe results here are solely for your information, they are not for a grade and we will not be looking at the output whatsoever. If you have any feedback, please don't hesitate to contact us. \n\t\n - CS22 TAs <3"
 
 def write_result(output_header, output_text, output_score=1, output_max_score=1, dropdown_results=[]):
+    result = {}
     # Appends to existing results if they already exist
     if os.path.isfile(RESULT):
         with open(RESULT, "r") as f:
