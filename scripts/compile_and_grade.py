@@ -226,7 +226,7 @@ def set_pages(submission_url, pages):
 def remove_draft(filename):
     with open(SUBMISSION + filename, 'r') as file: 
         data = file.read() 
-    data = data.replace('\usepackage[draft]', '\usepackage[]') 
+    data = data.replace('\\usepackage[draft]', '\\usepackage[]') 
     with open(SUBMISSION + filename, 'w') as file:
         file.write(data)
         
