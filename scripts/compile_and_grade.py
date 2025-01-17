@@ -214,7 +214,7 @@ def set_pages(submission_url, pages):
     # Convert pages list to dictionary and page numbers to Gradescope IDs
     pages_dict = {}
     for idx, question_pages in enumerate(pages):
-        pages_dict.update({config.question_ids[idx]: map(lambda num: pages_resp[num]["id"], question_pages)})
+        pages_dict.update({config.question_ids[idx]: list(map(lambda num: pages_resp[num]["id"]), question_pages)})
     update_pages_form_data = {"pages_for_question": json.dumps(pages_dict), "pages": json.dumps(pages_resp)}
     update_pages_resp = session.post(update_pages_url, data=update_pages_form_data)
     if update_pages_resp.ok and update_pages_resp.json()["path"]:
