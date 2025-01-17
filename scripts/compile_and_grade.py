@@ -82,10 +82,10 @@ def grade():
     output_tests = [warning_test, log_test]
     if "0 warnings" in log_analysis_output:
         warning_test["name"] = "No warnings!"
-        with open(f"{SOURCE}templates/fun/tea.txt", "r", encoding="utf-8") as fun_tea_file:
-            fun_tea_text = fun_tea_file.read()
-        tea_test = {"name": "Tea!", "output": fun_tea_text, "visibility": "visible"}
-        output_tests = output_tests + [tea_test]
+        with open(f"{SOURCE}templates/fun/frog.txt", "r", encoding="utf-8") as fun_frog_file:
+            fun_frog_text = fun_frog_file.read()
+        frog_test = {"name": "Frog Cowboy!", "output": fun_frog_text, "visibility": "visible"}
+        output_tests = output_tests + [frog_test]
     else:
         warning_test["max_score"] = 0
         warning_test["score"] = -0.1
