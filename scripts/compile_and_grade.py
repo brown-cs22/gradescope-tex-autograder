@@ -4,6 +4,7 @@ import json
 import requests
 import config
 import time
+import shlex
 from bs4 import BeautifulSoup
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from pypdf import PdfReader
@@ -60,7 +61,7 @@ def compile_file(filename):
     """
     Compiles the file and returns the output.
     """
-    command = "pdflatex -shell-escape -interaction=nonstopmode -halt-on-error -jobname=submission " + SUBMISSION + filename + " > " + OUTPUT
+    command = "pdflatex -shell-escape -interaction=nonstopmode -halt-on-error -jobname=submission " + shlex.quote(SUBMISSION + filename) + " > " + OUTPUT
     os.system(command)
     os.system(command)
 
