@@ -223,11 +223,18 @@ def set_pages(submission_url, pages):
         write_result("Page Assignment Failure", "Invalid response received while trying to update page selection on Gradescope. Please try again or contact the course staff.", 0, 0)
         sys.exit(1)
 
+def remove_draft(filename):
+    with open(SUBMISSION + filename, 'r') as file: 
+        data = file.read() 
+    data = data.replace('\usepackage[draft]', '\usepackage[]') 
+    with open(SUBMISSION + filename, 'w') as file:
+        file.write(data)
         
 
 def main():
     os.chdir(SUBMISSION)
     file_to_compile = get_filename()
+    remove_draft(file_to_compile)
     compile_file(file_to_compile)
     grade()
     submission_url = upload()
